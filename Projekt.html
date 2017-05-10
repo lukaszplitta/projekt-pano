@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Custom Street View panorama tiles</title>
+    <meta charset="utf-8">
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+var panorama;
+
+// The panorama that will be used as the entry point to the custom
+// panorama set.
+var entryPanoId = null;
+
+function initialize() {
+  // The latlng of the entry point to the Google office on the road.
+  var sydneyOffice = new google.maps.LatLng(53.463397, 14.577230);
+
+  // Set up the map and enable the Street View control.
+  var mapOptions = {
+    center: sydneyOffice,
+    zoom: 0,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+  panorama = map.getStreetView();
+  // Set up Street View and initially set it visible. Register the
+  // custom panorama provider function.
+  var panoOptions = {
+    position: sydneyOffice,
+    visible: true,
+    panoProvider:  getCustomPanorama
+  };
+  panorama.setOptions(panoOptions);
+
+  // Create a StreetViewService object.
+  var streetviewService = new google.maps.StreetViewService();
+
+  // Compute the nearest panorama to the Google Sydney office
+  // using the service and store that pano ID.
+  var radius = 50;
+  streetviewService.getPanoramaByLocation(sydneyOffice, radius,
+      function(result, status) {
+    if (status == google.maps.StreetViewStatus.OK) {
+      // We'll monitor the links_changed event to check if the current
+      // pano is either a custom pano or our entry pano.
+      google.maps.event.addListener(panorama, 'links_changed',
+        function() {
+          createCustomLinks(result.location.pano);
+        });
+    }
+  });
+}
+
+function getCustomPanoramaTileUrl(pano,zoom,tileX,tileY) {
+	
+	switch (pano) {
+		case '1':
+			return 'front_center.jpg';
+		case '2':
+			return 'front_left.jpg';
+		case '3':
+			return 'front_right.jpg';
+		case '4':
+			return 'w_front_left.jpg';
+		case '5':
+			return 'leftside_center.jpg';
+		case '6':
+			return 'rightside_center.jpg';
+		case '7':
+			return 'back_right.jpg';
+		case '8':
+			return 'school_in1.jpg';
+		case '9':
+			return 'school_in2.jpg';
+		case '10':
+			return 'school_in3.jpg';
+		case '11':
+			return 'hala_out.jpg';
+		case '12':
+			return 'court.jpg';
+		case '13':
+			return 'back_center.jpg';
+		case '14':
+			return 'back_left.jpg';
+		case '15':
+			return 'w_leftside_center.jpg';
+		case '16':
+			return 'w_back_left.jpg';
+		case '17':
+			return 'w_back_center.jpg';
+		case '18':
+			return 'school_in4.jpg';
+		case '19':
+			return 'w_in_back.jpg';
+		case '20':
+			return 'w_in2.jpg';
+		case '21':
+			return 'w_in_front.jpg';
+		case '22':
+			return 'w_in3.jpg';
+		case '23':
+			return 'w_wc1.jpg';
+		case '24':
+			return 'w_wc2.jpg';
+		case '25':
+			return 'back_left.jpg';
+		case '26':
+			return 'w_in_p1.jpg';
+		case '27':
+			return 'w_in_p2.jpg';
+		case '28':
+			return 'front_right2.jpg';
+		case '29':
+			return 'front_left2.jpg';
+		case '30':
+			return 'w_left2.jpg';
+		case '31':
+			return 'w_in_front2.jpg';
+		case '32':
+			return 'w1_in1.jpg';
+		case '33':
+			return 'w_in4.jpg';
+		case '34':
+			return 'w1_in2.jpg';
+		case '35':
+			return 'w1_in3.jpg';
+		case '36':
+			return 'school_in5.jpg';
+		case '37':
+			return 'school_inb.jpg';
+		case '38':
+			return 'school_inbup.jpg';
+		case '39':
+			return 'school_back1.jpg';
+		case '40':
+			return 'school_back2.jpg';
+		case '41':
+			return 'school_frontp1.jpg';
+		case '42':
+			return 'school_frontp2.jpg';
+		case '43':
+			return 'school_aula.jpg';
+		case '44':
+			return 'w_backdoor.jpg';
+		case '45':
+			return 'school_back3.jpg';
+		case '46':
+			return 'kitchen.jpg';
+		case '47':
+			return 'gim.jpg';
+		case '48':
+			return 'school_back2.jpg';
+		case '49':
+			return 'school_back2.jpg';
+		case '50':
+			return 'school_back2.jpg';
+	}
+}
+
+
+function getCustomPanorama(pano) {
+  switch(pano) {
+    case '1':
+      return {
+        location: {
+          pano: '1',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '2':
+      return {
+        location: {
+          pano: '2',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '3':
+      return {
+        location: {
+          pano: '3',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '4':
+      return {
+        location: {
+          pano: '4',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '5':
+      return {
+        location: {
+          pano: '5',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '6':
+      return {
+        location: {
+          pano: '6',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '7':
+      return {
+        location: {
+          pano: '7',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '8':
+      return {
+        location: {
+          pano: '8',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '9':
+      return {
+        location: {
+          pano: '9',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '10':
+      return {
+        location: {
+          pano: '10',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+      case '11':
+      return {
+        location: {
+          pano: '11',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '12':
+      return {
+        location: {
+          pano: '12',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '13':
+      return {
+        location: {
+          pano: '13',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '14':
+      return {
+        location: {
+          pano: '14',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '15':
+      return {
+        location: {
+          pano: '15',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '16':
+      return {
+        location: {
+          pano: '16',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '17':
+      return {
+        location: {
+          pano: '17',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '18':
+      return {
+        location: {
+          pano: '18',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '19':
+      return {
+        location: {
+          pano: '19',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '20':
+      return {
+        location: {
+          pano: '20',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '21':
+      return {
+        location: {
+          pano: '21',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '22':
+      return {
+        location: {
+          pano: '22',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '23':
+      return {
+        location: {
+          pano: '23',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '24':
+      return {
+        location: {
+          pano: '24',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '25':
+      return {
+        location: {
+          pano: '25',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '26':
+      return {
+        location: {
+          pano: '26',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '27':
+      return {
+        location: {
+          pano: '27',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '28':
+      return {
+        location: {
+          pano: '28',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '29':
+      return {
+        location: {
+          pano: '29',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '30':
+      return {
+        location: {
+          pano: '30',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '31':
+      return {
+        location: {
+          pano: '31',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '32':
+      return {
+        location: {
+          pano: '32',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '33':
+      return {
+        location: {
+          pano: '33',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '34':
+      return {
+        location: {
+          pano: '34',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '35':
+      return {
+        location: {
+          pano: '35',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '36':
+      return {
+        location: {
+          pano: '36',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '37':
+      return {
+        location: {
+          pano: '37',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '38':
+      return {
+        location: {
+          pano: '38',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '39':
+      return {
+        location: {
+          pano: '39',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '40':
+      return {
+        location: {
+          pano: '40',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '41':
+      return {
+        location: {
+          pano: '41',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '42':
+      return {
+        location: {
+          pano: '42',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '43':
+      return {
+        location: {
+          pano: '43',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '44':
+      return {
+        location: {
+          pano: '44',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '45':
+      return {
+        location: {
+          pano: '45',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '46':
+      return {
+        location: {
+          pano: '46',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '47':
+      return {
+        location: {
+          pano: '47',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '48':
+      return {
+        location: {
+          pano: '48',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '49':
+      return {
+        location: {
+          pano: '49',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+	  case '50':
+      return {
+        location: {
+          pano: '50',
+          description: 'ZCEMIP',
+          latLng: new google.maps.LatLng(53.463397, 14.577230)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'ZCEMiP',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(2048, 1024),
+          worldSize: new google.maps.Size(2048, 1024),
+		  centerHeading: 1,
+          // The heading at the origin of the panorama tile set.
+          
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+  }
+}
+
+function createCustomLinks(entryPanoId) {
+  var links = panorama.getLinks();
+  var panoId = panorama.getPano();
+
+  switch(panoId) {
+    case entryPanoId:
+      // Adding a link in the view from the entrance of the building to
+      // reception.
+      links.push({
+        heading: 100,
+        description : 'ZCEMiP',
+        pano : '1'
+      });
+      break;
+    case '1':
+      // Adding a link in the view from the entrance of the office
+      // with an arrow pointing at 100 degrees, with a text of 'Exit'
+      // and loading the street entrance of the building pano on click.
+      links.push({
+        heading: 195,
+        description : 'Wyjscie',
+        pano : entryPanoId
+      },{
+	  heading: 270,
+	  description : '',
+	  pano : '29'
+	  },{
+	  heading: 105,
+	  description : '',
+	  pano : '3'
+	  },{
+	  heading: 360,
+	  description : '',
+	  pano : '8'});
+	 
+      break;
+	   case '2':
+     
+      links.push({
+        heading: 110,
+        description : '',
+        pano : '29'
+      },{
+	  heading: 270,
+	  description : '',
+	  pano : '30'
+	  },{
+	  heading: 0,
+	  description : '',
+	  pano : '21'
+	  });
+      break;
+	   case '3':
+     
+      links.push({
+        heading: 0,
+        description : 'ZCEMiP',
+        pano : '1'
+      },{
+	  heading: 120,
+	  description : '',
+	  pano : '28'
+	  });
+      break;
+	  case '4':
+     
+      links.push({
+        heading: 0,
+        description : '',
+        pano : '30'
+      },{
+		heading: 270,
+        description : '',
+        pano : '15'})
+      break;
+	  case '5':
+     
+      links.push({
+        heading: 0,
+        description : '',
+        pano : '29'
+      },{
+		heading: 180,
+        description : '',
+        pano : '14'})
+      break;
+	  case '6':
+     
+      links.push({
+        heading: 270,
+        description : '',
+        pano : '28'
+      },{
+	  heading: 90,
+	  description : '',
+	  pano : '7'
+	  })
+      break;
+	  case '7':
+     
+      links.push({
+        heading: 270,
+        description : '',
+        pano : '6'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '13'})
+      break;
+	  case '8':
+     
+      links.push({
+        heading: 0,
+        description : '',
+        pano : '1'
+      },{
+	  heading: 270,
+	  description : '',
+	  pano : '9'})
+      break;
+	  case '9':
+     
+      links.push({
+        heading: 0,
+        description : '',
+        pano : '10'
+      },{
+	  heading: 270,
+	  description : '',
+	  pano : '8'
+	  },{
+	  heading: 90,
+	  description : '',
+	  pano : '36'})
+      break;
+	  case '10':
+     
+      links.push({
+        heading: 0,
+        description : '',
+        pano : '37'
+      },{
+	  heading: 270,
+	  description : '',
+	  pano : '9'
+	  },{
+	  heading: 90,
+	  description : 'Na 1 pietro',
+	  pano : '39'
+	  })
+      break;
+	  case '11':
+     
+      links.push({
+        heading: 0,
+        description : '',
+        pano : '13'
+      },{
+	  heading: 70,
+	 escription : '',
+	 pano : '47'
+	},
+	 {
+	  heading: 180,
+	  description : '',
+	  pano : '12'})
+      break;
+	   case '12':
+     
+      links.push({
+        heading: 270,
+        description : '',
+        pano : '11'
+      })
+      break;
+	   case '13':
+     
+      links.push({
+        heading: 7,
+        description : '',
+        pano : '10'
+      },{
+		heading: 270,
+		description : '',
+		pano : '7'
+	  },{
+		heading: 180,
+		description : '',
+		pano : '11'
+	  },{
+		heading: 90,
+		description : '',
+		pano : '14'})
+      break;
+	   case '14':
+     
+      links.push({
+        heading: 90,
+        description : '',
+        pano : '5'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '13'
+	  },{
+	  heading: 140,
+	  description : '',
+	  pano : '44'
+	  })
+      break;
+	  case '15':
+     
+      links.push({
+        heading: 190,
+        description : '',
+        pano : '4'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '16'
+	  })
+      break;
+	  case '16':
+     
+      links.push({
+        heading: 100,
+        description : '',
+        pano : '15'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '17'
+	  })
+      break;
+	  case '17':
+     
+      links.push({
+        heading: 180,
+        description : '',
+        pano : '44'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '16'
+	  })
+      break;
+	  case '18':
+     
+      links.push({
+        heading: 180,
+        description : '',
+        pano : '28'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '36'
+	  })
+      break;
+	  case '19':
+     
+      links.push({
+        heading: 180,
+        description : '',
+        pano : '44'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '20'
+	  },{
+	  heading: 50,
+	  description : '',
+	  pano : '35'
+	  })
+      break;
+	  case '20':
+     
+      links.push({
+        heading: 270,
+        description : '',
+        pano : '19'
+      },{
+	  heading: 180,
+	  description : '',
+	  pano : '21'
+	  })
+      break;
+	  case '21':
+     
+      links.push({
+        heading: 40,
+        description : '',
+        pano : '23'
+      },{
+	  heading: 110,
+	  description : '',
+	  pano : '31'
+	  },{
+	  heading: 250,
+	  description : '',
+	  pano : '20'
+	  },{
+	  heading: 350,
+	  description : '',
+	  pano : '2'
+	  })
+      break;
+	  case '22':
+     
+      links.push({
+        heading: 270,
+        description : '',
+        pano : '33'
+      },{
+	  heading: 335,
+	  description : '',
+	  pano : '23'
+	  },{
+	  heading: 25,
+	  description : '',
+	  pano : '26'
+	  },{
+	  heading: 90,
+	  description : '',
+	  pano : '31'
+	  })
+      break;
+	  case '23':
+     
+      links.push({
+        heading: 0,
+        description : '',
+        pano : '24'
+      },{
+	  heading: 270,
+	  description : '',
+	  pano : '21'
+	  })
+      break;
+	  case '24':
+     
+      links.push({
+        heading: 180,
+        description : '',
+        pano : '22'
+      },{
+	  heading: 270,
+	  description : '',
+	  pano : '23'
+	  })
+      break;
+	  case '25':
+     
+      links.push({
+        heading: 180,
+        description : '',
+        pano : '6'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '9'
+	  })
+      break;
+	  case '26':
+     
+      links.push({
+        heading: 180,
+        description : '',
+        pano : '27'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '22'
+	  })
+      break;
+	  case '27':
+     
+      links.push({
+        heading: 0,
+        description : '',
+        pano : '26'
+      })
+      break;
+	  case '28':
+     
+      links.push({
+        heading: 180,
+        description : '',
+        pano : '3'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '6'
+	  },{
+	  heading: 270,
+	  description : '',
+	  pano : '18'})
+      break;
+	  case '29':
+     
+     links.push({
+        heading: 90,
+        description : '',
+        pano : '2'
+      },{
+	  heading: 180,
+	  description : '',
+	  pano : '5'
+	  },{
+	  heading: 270,
+	  description : '',
+	  pano : '1'
+	  })
+	  break;
+	  case '30':
+     
+      links.push({
+        heading: 180,
+        description : '',
+        pano : '4'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '2'
+	  })
+      break;
+	  case '31':
+     
+      links.push({
+        heading: 90,
+        description : '',
+        pano : '22'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '32'
+	  },{
+	  heading: 270,
+	  description : '',
+	  pano : '21'
+	  })
+      break;
+	  case '32':
+     
+      links.push({
+        heading: 270,
+        description : '',
+        pano : '31'
+      },{
+	  heading: 180,
+	  description : '',
+	  pano : '34'
+	  })
+      break;
+	  case '33':
+     
+      links.push({
+        
+	  heading: 180,
+	  description : '',
+	  pano : '22'
+	  })
+      break;
+	  case '34':
+     
+      links.push({
+        heading: 90,
+        description : '',
+        pano : '32'
+      },{
+	  heading: 180,
+	  description : '',
+	  pano : '35'
+	  })
+      break;
+	  case '35':
+     
+      links.push({
+        heading: 180,
+        description : 'b',
+        pano : '34'
+      },{
+	  heading: 270,
+	  description : '',
+	  pano : '19'}
+	  )
+      break;
+	  case '36':
+     
+      links.push({
+        heading: 120,
+        description : '',
+        pano : '18'
+      },{
+	  heading: 0,
+	  description : 'Do kuchni',
+	  pano : '46'
+	  },{
+	  heading: 270,
+	  description : '',
+	  pano : '9'
+	  },{
+	  heading: 190,
+	  description : 'Na 1 pietro',
+	  pano : '41'
+	  })
+      break;
+	  case '37':
+     
+      links.push({
+        heading: 120,
+        description : 'Na 1 pietro',
+        pano : '38'
+      },{
+	  heading: 0,
+	  description : '',
+	  pano : '10'
+	  })
+      break;
+	  case '38':
+     
+      links.push({
+	  heading: 60,
+	  description : 'Na parter',
+	  pano : '37'
+	  })
+      break;
+	  case '39':
+     
+      links.push({
+        heading: 40,
+        description : 'Na parter',
+        pano : '10'
+      },{
+	  heading: 0,
+	  description : 'Na 2 pietro',
+	  pano : '40'
+	  })
+      break;
+	  case '40':
+     
+      links.push({
+        heading: 250,
+        description : 'Na 3 pietro',
+        pano : '45'
+      },{
+	  heading: 300,
+	  description : 'Na 1 pietro',
+	  pano : '39'
+	  },{
+	  heading: 90,
+	  description : '',
+	  pano : '42'
+	  })
+      break;
+	  case '41':
+     
+      links.push({
+        heading: 260,
+        description : 'Na 2 pietro',
+        pano : '42'
+      },{
+        heading: 300,
+        description : 'Na parter',
+        pano : '36'
+      },{
+        heading: 210,
+        description : 'Do auli',
+        pano : '43'
+      })
+      break;
+	  case '42':
+     
+      links.push({
+        heading: 250,
+        description : '',
+        pano : '40'
+      },{
+	  heading: 300,
+	  description : 'Na 1 pietro',
+	  pano : '41'
+	  })
+      break;
+	  case '43':
+     
+      links.push({
+        heading: 0,
+        description : '',
+        pano : '41'
+      })
+      break;
+	  case '44':
+     
+      links.push({
+        heading: 240,
+        description : '',
+        pano : '17'
+      },{
+	  heading: 310,
+	  description : '',
+	  pano : '14'
+	  },{
+	  heading: 90,
+	  description : '',
+	  pano : '19'
+	  })
+      break;
+	  case '45':
+     
+      links.push({
+        heading: 250,
+        description : 'Na 2 pietro',
+        pano : '40'
+      })
+      break;
+	  case '46':
+     
+      links.push({
+        heading: 250,
+        description : 'Na parter',
+        pano : '36'
+      })
+      break;
+	  case '47':
+     
+      links.push({
+        heading: 150,
+        description : '',
+        pano : '11'
+      })
+      break;
+	  case '48':
+     
+      links.push({
+        heading: 250,
+        description : 'Na 3 pietro',
+        pano : '41'
+      },{
+	  heading: 300,
+	  description : 'Na 1 pietro',
+	  pano : '39'
+	  })
+      break;
+	  case '49':
+     
+      links.push({
+        heading: 250,
+        description : 'Na 3 pietro',
+        pano : '41'
+      },{
+	  heading: 300,
+	  description : 'Na 1 pietro',
+	  pano : '39'
+	  })
+      break;
+	  case '50':
+     
+      links.push({
+        heading: 250,
+        description : 'Na 3 pietro',
+        pano : '41'
+      },{
+	  heading: 300,
+	  description : 'Na 1 pietro',
+	  pano : '39'
+	  })
+      break;
+	  
+    
+  }
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>
